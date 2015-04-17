@@ -12,7 +12,7 @@
 
 @interface ViewController : UIViewController
 
-@property (nonatomic, retain) UIWindow *window;
-@property (nonatomic, retain) IBOutlet EAGLView *glView;
+@property (nonatomic, strong) UIWindow *window;
+@property (nonatomic, strong) IBOutlet EAGLView *glView;
 
 @end

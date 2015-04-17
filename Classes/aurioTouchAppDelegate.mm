@@ -79,10 +79,6 @@
 - (void)applicationWillEnterForeground:(UIApplication *)application {
 }
 
-- (void)dealloc
-{
-	[super dealloc];
-}
 
 
 
