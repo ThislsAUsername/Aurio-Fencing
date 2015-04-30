@@ -179,7 +179,6 @@ typedef enum aurioTouchDisplayMode {
         context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES1];
 		
 		if(!context || ![EAGLContext setCurrentContext:context] || ![self createFramebuffer]) {
-			[self release];
 			return nil;
 		}
         
@@ -244,7 +243,6 @@ typedef enum aurioTouchDisplayMode {
         // Add the text view as a subview of the overlay BG
         [sampleSizeOverlay addSubview:sampleSizeText];
         // Text view was retained by the above line, so we can release it now
-        [sampleSizeText release];
         
         // We don't add sampleSizeOverlay to our main view yet. We just hang on to it for now, and add it when we
         // need to display it, i.e. when a user starts a pinch/zoom.
@@ -1045,12 +1043,10 @@ CGPathRef CreateRoundedRectPath(CGRect RECT, CGFloat cornerRadius)
 		[EAGLContext setCurrentContext:nil];
 	}
 	
-	[context release];
 	context = nil;
     
     free(oscilLine);
 	
-	[super dealloc];
 }
 
 
@@ -1097,7 +1093,7 @@ OSStatus RenderTone(
     
     // Get the tone parameters out of the view controller
     EAGLView *viewController =
-    (EAGLView *)inRefCon;
+    (__bridge EAGLView *)inRefCon;
     double theta = viewController->_theta;
     double theta_increment = 2.0 * M_PI * viewController->_frequency / [viewController->audioController sessionSampleRate];
     
@@ -1143,10 +1139,11 @@ OSStatus RenderTone(
     OSErr err = AudioComponentInstanceNew(defaultOutput, &toneUnit);
     NSAssert1(toneUnit, @"Error creating unit: %ld", err);
     
+    __weak EAGLView *weakself = self;
     // Set our tone rendering function on the unit
     AURenderCallbackStruct input;
     input.inputProc = RenderTone;
-    input.inputProcRefCon = self;
+    input.inputProcRefCon = (__bridge void *)weakself;
     err = AudioUnitSetProperty(toneUnit,
                                kAudioUnitProperty_SetRenderCallback,
                                kAudioUnitScope_Input,

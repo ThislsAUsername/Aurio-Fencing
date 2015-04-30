@@ -209,7 +209,7 @@ static OSStatus	performRender (void                         *inRefCon,
     // rebuild the audio chain
     delete _bufferManager;      _bufferManager = NULL;
     delete _dcRejectionFilter;  _dcRejectionFilter = NULL;
-    [_audioPlayer release]; _audioPlayer = nil;
+     _audioPlayer = nil;
     
     [self setupAudioChain];
     [self startIOUnit];
@@ -347,7 +347,7 @@ static OSStatus	performRender (void                         *inRefCon,
     NSError *error;
     
     CFURLRef url = CFURLCreateWithFileSystemPath(kCFAllocatorDefault, CFStringRef([[NSBundle mainBundle] pathForResource:@"button_press" ofType:@"caf"]), kCFURLPOSIXPathStyle, false);
-    _audioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:(NSURL*)url error:&error];
+    _audioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:(__bridge NSURL*)url error:&error];
     
     XThrowIfError((OSStatus)error.code, "couldn't create AVAudioPlayer");
     
@@ -399,9 +399,8 @@ static OSStatus	performRender (void                         *inRefCon,
 {
     delete _bufferManager;      _bufferManager = NULL;
     delete _dcRejectionFilter;  _dcRejectionFilter = NULL;
-    [_audioPlayer release];     _audioPlayer = nil;
+         _audioPlayer = nil;
     
-    [super dealloc];
 }
 
 @end

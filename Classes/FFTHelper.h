@@ -54,7 +54,6 @@
 
 #include <Accelerate/Accelerate.h>
 
-
 class FFTHelper
 {
 public:

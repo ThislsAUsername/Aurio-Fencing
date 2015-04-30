@@ -47,14 +47,9 @@
  
  */
 
-@class EAGLView;
 
-@interface aurioTouchAppDelegate : NSObject <UIApplicationDelegate> {
-	IBOutlet UIWindow       *window;
-	IBOutlet EAGLView       *view;
-}
+@interface aurioTouchAppDelegate : NSObject <UIApplicationDelegate> 
 
-@property (nonatomic, retain)	UIWindow        *window;
-@property (nonatomic, retain)	EAGLView        *view;
+@property (strong, nonatomic) UIWindow *window;
 
 @end
