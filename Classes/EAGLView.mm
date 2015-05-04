@@ -154,65 +154,54 @@ typedef enum aurioTouchDisplayMode {
         displayMode = aurioTouchDisplayModeOscilloscopeFFT;
         bufferManager->SetDisplayMode(aurioTouchDisplayModeOscilloscopeFFT);
         [audioController startIOUnit];
+        _frequency = 0;
+        if (!toneUnit)
+        {
+            [self createToneUnit];
+            
+            // Stop changing parameters on the unit
+            OSErr err = AudioUnitInitialize(toneUnit);
+            NSAssert1(err == noErr, @"Error initializing unit: %ld", err);
+            
+            // Start playback
+            err = AudioOutputUnitStart(toneUnit);
+            NSAssert1(err == noErr, @"Error starting unit: %ld", err);
+        }
     }
 	return self;
 }
 
 
-
-
-- (BOOL)ToggleMute:(double) input
-{
-        if (toneUnit)
-        {
-            AudioOutputUnitStop(toneUnit);
-            AudioUnitUninitialize(toneUnit);
-            AudioComponentInstanceDispose(toneUnit);
-            toneUnit = nil;
-            return true;
-        } else {
-            _frequency = input;
-            
-            if (!toneUnit)
-            {
-                [self createToneUnit];
-                
-                // Stop changing parameters on the unit
-                OSErr err = AudioUnitInitialize(toneUnit);
-                //NSAssert1(err == noErr, @"Error initializing unit: %ld", err);
-                
-                // Start playback
-                err = AudioOutputUnitStart(toneUnit);
-                //NSAssert1(err == noErr, @"Error starting unit: %ld", err);
-            }
-            return false;
-    }
+- (void)ChangeFreq:(double)input {
+    _frequency = input;
 }
 
-- (NSString *)GetInput
+
+- (NSString *)GetInput:(float&)frequency :(float&)amplitude
 {
     if (![audioController audioChainIsBeingReconstructed])  //hold off on drawing until the audio chain has been reconstructed
     {
-    BufferManager* bufferManager = [audioController getBufferManagerInstance];
-    if (bufferManager->HasNewFFTData())
-    {
-        bufferManager->GetFFTOutput(l_fftData);
-    }
-    // credit goes to http://stackoverflow.com/questions/4364823/how-do-i-obtain-the-frequencies-of-each-value-in-a-fft
-    
-    Float32 *checking = (Float32*) calloc(bufferManager->GetFFTOutputBufferLength(), sizeof(Float32));
-    bufferManager->GetFFTOutput(checking);
-    NSMutableArray *Sorter = [[NSMutableArray alloc] initWithCapacity:bufferManager->GetFFTOutputBufferLength()];
-    for (uint i = 0; i < bufferManager->GetFFTOutputBufferLength(); i++){
-        [Sorter insertObject:[[NSNumber alloc] initWithDouble:checking[i]] atIndex:i];
-    }
-    NSSortDescriptor *sd = [[NSSortDescriptor alloc] initWithKey:nil ascending:NO];
-    NSArray *sorted = [Sorter sortedArrayUsingDescriptors:@[sd]];
-    
-    float ThisIsTheMath = [Sorter indexOfObject:[sorted objectAtIndex:0]]*[audioController sessionSampleRate]/bufferManager->GetFFTOutputBufferLength();
-    //float ThisIsTheMath = [Sorter indexOfObject:[sorted objectAtIndex:0]];
-    
-    return [[NSString alloc] initWithFormat:@"%f",ThisIsTheMath];
+        BufferManager* bufferManager = [audioController getBufferManagerInstance];
+        if (bufferManager->HasNewFFTData())
+        {
+            bufferManager->GetFFTOutput(l_fftData);
+        }
+        // credit goes to http://stackoverflow.com/questions/4364823/how-do-i-obtain-the-frequencies-of-each-value-in-a-fft
+        
+        Float32 *checking = (Float32*) calloc(bufferManager->GetFFTOutputBufferLength(), sizeof(Float32));
+        bufferManager->GetFFTOutput(checking);
+        NSMutableArray *Sorter = [[NSMutableArray alloc] initWithCapacity:bufferManager->GetFFTOutputBufferLength()];
+        for (uint i = 0; i < bufferManager->GetFFTOutputBufferLength(); i++){
+            [Sorter insertObject:[[NSNumber alloc] initWithDouble:checking[i]] atIndex:i];
+        }
+        NSSortDescriptor *sd = [[NSSortDescriptor alloc] initWithKey:nil ascending:NO];
+        NSArray *sorted = [Sorter sortedArrayUsingDescriptors:@[sd]];
+        
+        uint index =[Sorter indexOfObject:[sorted objectAtIndex:0]];
+        frequency = (index/2)*[audioController sessionSampleRate]/(bufferManager->GetFFTOutputBufferLength());
+        amplitude += [[sorted objectAtIndex:0] floatValue];
+        
+        return [[NSString alloc] initWithFormat:@"Current Frequency: %d\nCurrent Amplitude: %d", (int)frequency, (int)amplitude];
     }
     return @"-1";
 }

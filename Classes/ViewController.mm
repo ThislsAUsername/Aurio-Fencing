@@ -15,6 +15,9 @@
 @implementation ViewController
 
 NSTimer* mainTimer;
+int ToucheCount = 0;
+float baselineAmplitude = 0;
+const float AmpFactor = 25, FreqFactor = 0.001;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -49,26 +52,17 @@ NSTimer* mainTimer;
 
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
-    [self TogglePlay];
+    [_glView ChangeFreq:[[_OutFreqField text] floatValue]];
     [textField resignFirstResponder];
     return YES;
 }
 
 
-- (IBAction)PlayButtonPressed:(id)sender {
-    [self TogglePlay];
+- (IBAction)EstablishBaseline:(id)sender {
+    float frequency, amplitude;
+    _InFreqLabel.text = [_glView GetInput:frequency :amplitude];
+    baselineAmplitude = -amplitude;
 }
-
-- (void)TogglePlay {
-    if ([_glView ToggleMute:[[_OutFreqField text] doubleValue]]) {
-        // from http://stackoverflow.com/questions/4954608/change-text-of-button-and-disable-button-in-ios
-        [_PlayButton setTitle:@"Play" forState:UIControlStateNormal];
-    }
-    else
-        [_PlayButton setTitle:@"Mute" forState:UIControlStateNormal];
-    
-}
-
 
 // stolen from http://stackoverflow.com/questions/11636461/continuously-check-for-data-method-ios
 -(void)startCheckingValue
@@ -79,7 +73,12 @@ NSTimer* mainTimer;
 
 -(void)checkValue:(NSTimer *)mainTimer
 {
-    _InFreqLabel.text = [_glView GetInput];
+    float frequency, amplitude = baselineAmplitude;
+    _InFreqLabel.text = [_glView GetInput:frequency :amplitude];
+    if (amplitude > AmpFactor && ABS(frequency-[[_OutFreqField text] floatValue]) < frequency*FreqFactor) {
+        ToucheCount++;
+        NSLog(@"%d",ToucheCount);
+    } else ToucheCount = 0;
 }
 
 @end

@@ -62,7 +62,7 @@
 
 @property double frequency;
 @property double theta;
-- (BOOL)ToggleMute:(double) input;
-- (NSString *)GetInput;
+- (void)ChangeFreq:(double)input;
+- (NSString *)GetInput:(float&)frequency :(float&)amplitude;
 
 @end
