@@ -62,11 +62,7 @@
 
 @property double frequency;
 @property double theta;
-
-    
-@property (assign)  BOOL applicationResignedActive;
-
-- (void)startAnimation;
-- (void)stopAnimation;
+- (BOOL)ToggleMute:(double) input;
+- (NSString *)GetInput;
 
 @end

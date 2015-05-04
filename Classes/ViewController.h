@@ -10,9 +10,13 @@
 
 @class EAGLView;
 
-@interface ViewController : UIViewController
+@interface ViewController : UIViewController <UITextFieldDelegate>
 
 @property (nonatomic, strong) UIWindow *window;
 @property (nonatomic, strong) IBOutlet EAGLView *glView;
+@property (weak, nonatomic) IBOutlet UILabel *InFreqLabel;
+@property (weak, nonatomic) IBOutlet UITextField *OutFreqField;
+@property (weak, nonatomic) IBOutlet UIButton *PlayButton;
+- (IBAction)PlayButtonPressed:(id)sender;
 
 @end
