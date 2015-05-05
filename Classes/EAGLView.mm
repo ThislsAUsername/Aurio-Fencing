@@ -147,7 +147,7 @@ typedef enum aurioTouchDisplayMode {
 	if((self = [super initWithCoder:coder])) {
     
         audioController = [[AudioController alloc] init];
-        audioController.muteAudio = true;
+        audioController.muteAudio = true; // The tone unit is a separate entity, so I can just leave it muted and not have to figure out how to keep it from duplicating all the audio like the original AurioTouch
         l_fftData = (Float32*) calloc([audioController getBufferManagerInstance]->GetFFTOutputBufferLength(), sizeof(Float32));
         
         BufferManager* bufferManager = [audioController getBufferManagerInstance];
@@ -155,7 +155,7 @@ typedef enum aurioTouchDisplayMode {
         bufferManager->SetDisplayMode(aurioTouchDisplayModeOscilloscopeFFT);
         [audioController startIOUnit];
         _frequency = 0;
-        if (!toneUnit)
+        if (!toneUnit) // this code creates the tone unit
         {
             [self createToneUnit];
             
@@ -171,12 +171,13 @@ typedef enum aurioTouchDisplayMode {
 	return self;
 }
 
-
+// Used to define the frequency
 - (void)ChangeFreq:(double)input {
     _frequency = input;
 }
 
-
+// returns the amplitude and frequency, as well as a nicely formatted string
+// Yes, I am lazy and made them pointers.
 - (NSString *)GetInput:(float&)frequency :(float&)amplitude
 {
     if (![audioController audioChainIsBeingReconstructed])  //hold off on drawing until the audio chain has been reconstructed
@@ -187,7 +188,6 @@ typedef enum aurioTouchDisplayMode {
             bufferManager->GetFFTOutput(l_fftData);
         }
         // credit goes to http://stackoverflow.com/questions/4364823/how-do-i-obtain-the-frequencies-of-each-value-in-a-fft
-        
         Float32 *checking = (Float32*) calloc(bufferManager->GetFFTOutputBufferLength(), sizeof(Float32));
         bufferManager->GetFFTOutput(checking);
         NSMutableArray *Sorter = [[NSMutableArray alloc] initWithCapacity:bufferManager->GetFFTOutputBufferLength()];
@@ -197,8 +197,8 @@ typedef enum aurioTouchDisplayMode {
         NSSortDescriptor *sd = [[NSSortDescriptor alloc] initWithKey:nil ascending:NO];
         NSArray *sorted = [Sorter sortedArrayUsingDescriptors:@[sd]];
         
-        
-        
+        // Now that we have the array sorted, we can find the index/frequency we want.
+        // The array is double the length it needs to be, so we have to divide by 2
         uint index =[Sorter indexOfObject:[sorted objectAtIndex:0]];
         frequency = (index/2)*[audioController sessionSampleRate]/(bufferManager->GetFFTOutputBufferLength());
         amplitude += [[sorted objectAtIndex:0] floatValue];
@@ -214,16 +214,13 @@ typedef enum aurioTouchDisplayMode {
 	if([EAGLContext currentContext] == context) {
 		[EAGLContext setCurrentContext:nil];
 	}
-	
 	context = nil;
-    
     free(oscilLine);
-	
 }
 
 
 
-// Code stolen from http://www.cocoawithlove.com/2010/10/ios-tone-generator-introduction-to.html
+// The rest of the code in this docuent was stolen from http://www.cocoawithlove.com/2010/10/ios-tone-generator-introduction-to.html
 OSStatus RenderTone(
                     void *inRefCon,
                     AudioUnitRenderActionFlags 	*ioActionFlags,

@@ -15,13 +15,20 @@
 @implementation ViewController
 
 NSTimer* mainTimer;
+// counts touche duration
 int ToucheCount = 0;
+// Baseline Amplitude is used to make my touche calculation work
 float baselineAmplitude = 0;
+// AmpFactor is actually a threshhold. Both variables are used to determine whether the signal is a touche or not.
+// Decrease AmpFactor for more leniency
+// Increase FreqFactor for more leniency
 const float AmpFactor = 25, FreqFactor = 0.01;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self startCheckingValue];
+    _OutFreqField.text = [[NSString alloc] initWithFormat:@"%d", ABS((int) (arc4random()%7001+3000))];
+    [_glView ChangeFreq:[[_OutFreqField text] floatValue]];
     // Do any additional setup after loading the view.
 }
 
@@ -50,14 +57,14 @@ const float AmpFactor = 25, FreqFactor = 0.01;
 }
 */
 
-
+// The whole "resignfirstresponder" thing isn't working. Dunno why.
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
     [_glView ChangeFreq:[[_OutFreqField text] floatValue]];
     [textField resignFirstResponder];
     return YES;
 }
 
-
+// Zeroes out the amplitude input
 - (IBAction)EstablishBaseline:(id)sender {
     float frequency, amplitude;
     _InFreqLabel.text = [_glView GetInput:frequency :amplitude];
@@ -75,6 +82,8 @@ const float AmpFactor = 25, FreqFactor = 0.01;
 {
     float frequency, amplitude = baselineAmplitude;
     _InFreqLabel.text = [_glView GetInput:frequency :amplitude];
+    
+    // Touche detection logic
     if (amplitude > AmpFactor && ABS(frequency-[[_OutFreqField text] floatValue]) < frequency*FreqFactor) {
         ToucheCount++;
         _LastTouchDurationLabel.text = [[NSString alloc] initWithFormat:@"Last Touche Duration: %f", ToucheCount*.01];
