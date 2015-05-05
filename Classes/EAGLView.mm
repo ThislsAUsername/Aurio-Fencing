@@ -197,6 +197,8 @@ typedef enum aurioTouchDisplayMode {
         NSSortDescriptor *sd = [[NSSortDescriptor alloc] initWithKey:nil ascending:NO];
         NSArray *sorted = [Sorter sortedArrayUsingDescriptors:@[sd]];
         
+        
+        
         uint index =[Sorter indexOfObject:[sorted objectAtIndex:0]];
         frequency = (index/2)*[audioController sessionSampleRate]/(bufferManager->GetFFTOutputBufferLength());
         amplitude += [[sorted objectAtIndex:0] floatValue];

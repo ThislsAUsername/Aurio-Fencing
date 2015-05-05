@@ -15,6 +15,8 @@
 @property (nonatomic, strong) UIWindow *window;
 @property (nonatomic, strong) IBOutlet EAGLView *glView;
 @property (weak, nonatomic) IBOutlet UILabel *InFreqLabel;
+@property (weak, nonatomic) IBOutlet UILabel *LastTouchDurationLabel;
+@property (weak, nonatomic) IBOutlet UIImageView *ToucheImageView;
 @property (weak, nonatomic) IBOutlet UITextField *OutFreqField;
 - (IBAction)EstablishBaseline:(id)sender;
 

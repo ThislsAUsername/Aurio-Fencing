@@ -19,6 +19,7 @@
 		82DDBB4F17E3D74A00AA85C2 /* AudioController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 82DDBB4E17E3D74A00AA85C2 /* AudioController.mm */; };
 		82DDBB5B17E8BD9700AA85C2 /* BufferManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 82DDBB5917E8BD9700AA85C2 /* BufferManager.cpp */; };
 		82DDBB5E17E9009F00AA85C2 /* FFTHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 82DDBB5C17E9009F00AA85C2 /* FFTHelper.cpp */; };
+		848C01D61AF83E2E00DAC1A5 /* TOUCHE_TURTLE_2.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 848C01D51AF83E2E00DAC1A5 /* TOUCHE_TURTLE_2.jpg */; };
 		A15CFB1D0DE4A8C600FB5D08 /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = A15CFB1C0DE4A8C600FB5D08 /* icon.png */; };
 		A16C46DE0DE37EC400F4A0B3 /* EAGLView.mm in Sources */ = {isa = PBXBuildFile; fileRef = A16C46DC0DE37EC400F4A0B3 /* EAGLView.mm */; };
 		A16C47120DE37F9E00F4A0B3 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A16C47110DE37F9E00F4A0B3 /* OpenGLES.framework */; };
@@ -58,6 +59,7 @@
 		82DDBB5A17E8BD9700AA85C2 /* BufferManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BufferManager.h; sourceTree = "<group>"; };
 		82DDBB5C17E9009F00AA85C2 /* FFTHelper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FFTHelper.cpp; sourceTree = "<group>"; };
 		82DDBB5D17E9009F00AA85C2 /* FFTHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFTHelper.h; sourceTree = "<group>"; };
+		848C01D51AF83E2E00DAC1A5 /* TOUCHE_TURTLE_2.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = TOUCHE_TURTLE_2.jpg; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = ../Info.plist; sourceTree = "<group>"; };
 		A15CFB1C0DE4A8C600FB5D08 /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = icon.png; path = ../icon.png; sourceTree = "<group>"; };
 		A16C46DC0DE37EC400F4A0B3 /* EAGLView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = EAGLView.mm; path = Classes/EAGLView.mm; sourceTree = SOURCE_ROOT; };
@@ -207,6 +209,7 @@
 		F7D3FD800FD49094003CBAE4 /* images */ = {
 			isa = PBXGroup;
 			children = (
+				848C01D51AF83E2E00DAC1A5 /* TOUCHE_TURTLE_2.jpg */,
 				F7CF73120EB126740099AA71 /* fft_off.png */,
 				F7CF73130EB126740099AA71 /* fft_on.png */,
 				F7CF73140EB126740099AA71 /* mute_off.png */,
@@ -280,6 +283,7 @@
 				2B40B59418873E0600F4A921 /* Default-568h@2x.png in Resources */,
 				CE8A47441AE15DFC0045D696 /* mainStoryboard.storyboard in Resources */,
 				F7DF06DE0DF4AD57005687F5 /* button_press.caf in Resources */,
+				848C01D61AF83E2E00DAC1A5 /* TOUCHE_TURTLE_2.jpg in Resources */,
 				F7CF73110EB1258D0099AA71 /* sonogram.png in Resources */,
 				F7CF73160EB126740099AA71 /* fft_off.png in Resources */,
 				F7CF73170EB126740099AA71 /* fft_on.png in Resources */,
