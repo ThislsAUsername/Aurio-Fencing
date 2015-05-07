@@ -66,7 +66,7 @@ const float AmpFactor = 25, FreqFactor = 0.01;
 
 // Zeroes out the amplitude input
 - (IBAction)EstablishBaseline:(id)sender {
-    float frequency, amplitude;
+    float frequency = 0, amplitude = 0;
     _InFreqLabel.text = [_glView GetInput:frequency :amplitude];
     baselineAmplitude = -amplitude;
 }
